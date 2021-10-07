@@ -89,14 +89,16 @@
         margin-top: -6px;
       }
       text {
+        white-space: normal;
         text-transform: none;
         text-align: right;
+        white-space: normal;
         font-family: "Product Sans",Helvetica,Arial,sans-serif;
         letter-spacing: 0.2em;
         text-transform: uppercase;
         font-size: 10px;
+        line-height: 1.25;
         font-weight: 600;
-        width: 180px;
       }
 
       .tool-dots {
@@ -208,21 +210,21 @@ d3.csv("https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/
   console.log(today);
   var data = dataraw.filter(function(d) 
   { 
-    if(d["date"] == today){
-      if(d["continent"] != ""){
-        return d;
-      }
-      if(d["people_fully_vaccinated"] == ""){
-      //  d["people_fully_vaccinated"] = "45";
-        return d;
-      }
-      if(d["total_cases"] == ""){
-        
-        return d["total_cases"] += "N/A";
-      }
+    if(d["date"] != )
+    if(d["continent"] != ""){
+      return d;
+    }
+    if(d["people_fully_vaccinated"] == ""){
+    //  d["people_fully_vaccinated"] = "45";
+      return d;
+    }
+    if(d["total_cases"] == ""){
+      
+      return d["total_cases"] += "N/A";
+    }
 
     console.log(d["total_cases"]);
-    }
+
   });
   //console.log(data);
   clusters = new Array(6);

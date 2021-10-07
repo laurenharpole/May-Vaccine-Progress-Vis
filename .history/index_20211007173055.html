@@ -4,7 +4,7 @@
   <head>
   
     <meta charset="utf-8">
-    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
     <title>Project 1 Vaccine Visualization</title>
     <style>
       /* NOTE: CSS Styling Goes here */
@@ -27,7 +27,6 @@
         position: fixed;
         margin-left: 0px;
         margin-top: 0px;
-        overflow: scroll;
       }
       .circle {
         filter: 
@@ -89,14 +88,16 @@
         margin-top: -6px;
       }
       text {
+        white-space: normal;
         text-transform: none;
         text-align: right;
+        white-space: normal;
         font-family: "Product Sans",Helvetica,Arial,sans-serif;
         letter-spacing: 0.2em;
         text-transform: uppercase;
         font-size: 10px;
+        line-height: 1.25;
         font-weight: 600;
-        width: 180px;
       }
 
       .tool-dots {
@@ -195,34 +196,24 @@ colLeg = d3.select("#legend2").append("svg").attr("width", 300).attr("height", 2
 tool = d3.select("#label").append("svg").attr("width", 300).attr("height", 220);
 // ############ Begin Promise ############
 //Start of code
-d3.csv("https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv").then((dataraw) => {
+d3.csv("short_covid_may.csv").then((dataraw) => {
   var maxRadius = height*0.09;
   var padding = 1.5;
   var clusterPadding = 5;
-  var today = new Date();
-  var dd = String(today.getDate()).padStart(2, '0');
-  var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-  var yyyy = today.getFullYear();
-
-  today = yyyy + "-" + mm +  "-" + dd;
-  console.log(today);
   var data = dataraw.filter(function(d) 
   { 
-    if(d["date"] == today){
-      if(d["continent"] != ""){
-        return d;
-      }
-      if(d["people_fully_vaccinated"] == ""){
-      //  d["people_fully_vaccinated"] = "45";
-        return d;
-      }
-      if(d["total_cases"] == ""){
-        
-        return d["total_cases"] += "N/A";
-      }
-
-    console.log(d["total_cases"]);
+    if(d["continent"] != ""){
+      return d;
     }
+    if(d["people_fully_vaccinated"] == ""){
+    //  d["people_fully_vaccinated"] = "45";
+      return d;
+    }
+    if(d["total_cases"] == ""){
+      
+      return d["total_cases"] += "N/A";
+    }
+    console.log(d["total_cases"]);
   });
   //console.log(data);
   clusters = new Array(6);
