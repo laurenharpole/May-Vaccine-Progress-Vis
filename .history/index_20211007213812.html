@@ -10,7 +10,7 @@
       /* NOTE: CSS Styling Goes here */
        svg{
         
-        margin: 0;
+       
         margin-left: 100px;
       }
       
@@ -18,6 +18,7 @@
       body {
         background-image: linear-gradient(to left bottom, #ebf3fd, #eaf2fc); 
         margin: 0;
+        margin: 10px;
       }
       /* side navigation background coloration */
       .col-dash {
@@ -211,16 +212,28 @@ d3.csv("https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/
   var dd = String(today.getDate()).padStart(2, '0')-1;
   var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
   var yyyy = today.getFullYear();
+  console.log(mm);
   today = String(yyyy + "-" + mm +  "-" + dd);
   
  
   
   var data = dataraw.filter(function(d) 
   { 
-
+    //
+    //2021-10
+    // if(String(d["date"]) == today){
+      
+    //   console.log("yes")
+   // console.log(String(d["date"]).includes(mm));
+    // }
      if(String(d["date"]).includes(mm) && String(d["date"]).includes(dd)){
-   
-    if(d["location"] != ""|| d["location"] != d["continent"]){        
+     // console.log(d["date"])
+  //  console.log(today);
+    //   console.log(d["date"]);
+    // }
+    if(d["location"] != ""|| d["location"] != d["continent"]){
+    //d["location"] != "European Union"  || d["location"] != "Europe" || d["location"] != "North America" || d["location"] != "South America" || d["location"] != "Oceania" || d["location"] != "World"){
+        
         return d;
       }
       if(d["continent"] != "" || d["continent"] != NULL){
@@ -228,6 +241,7 @@ d3.csv("https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/
         return d;
       }
       if(d["people_fully_vaccinated"] == ""){
+      //  d["people_fully_vaccinated"] = "45";
         return d;
       }
       if(d["total_cases"] == ""){

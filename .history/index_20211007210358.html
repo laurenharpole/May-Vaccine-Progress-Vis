@@ -8,12 +8,9 @@
     <title>Project 1 Vaccine Visualization</title>
     <style>
       /* NOTE: CSS Styling Goes here */
-       svg{
-        
-        margin: 0;
+      svg{
         margin-left: 100px;
       }
-      
       /* body background coloration */
       body {
         background-image: linear-gradient(to left bottom, #ebf3fd, #eaf2fc); 
@@ -154,11 +151,7 @@
         opacity: 0.9;
       }
 
-     a.link{
-      color: rgb(49,69,106,1.0);
-      font-weight: 500;;
-     }
-
+     
       
     </style>
     <script src="https://d3js.org/d3.v6.min.js"></script>
@@ -170,7 +163,7 @@
     <h1 class="dash-head"> Worldwide Covid-19 Vaccine Progress</h1>
     <!-- <h1 class="dash-desc"> Description</h1>
     <p class="dash-desc-p"> Color per continent stuff Color per continent stuff Color per continent stuff</p> -->
-    <p class="dash-desc-p-head">  A visualization of <a class="link" href="https://github.com/owid">data</a> from 
+    <p class="dash-desc-p-head">  A visualization of data from 
     500,000 COVID-19, SARS-CoV-2, and related coronaviruses scholarly articles.</p>
     <p class="dash-desc-p"> Radii size is determented by number fully vaccinated individuals</p>
     <div id="legend"></div>
@@ -194,40 +187,52 @@
 const height = 500;
 const width = 500;
 d3.select("#label").raise(); 
-canvas = d3.select("#body").append("svg").attr("id", "bubbleid").attr("viewBox", `-50 20 ${width} ${height}`).append('g').attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
+canvas = d3.select("#body").append("svg").attr("viewBox", `-50 20 ${width} ${height}`).append('g').attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
 //sizeLeg = d3.select("#sizeleg").append("svg");
 //.attr("viewBox", `-30 50 ${width} ${height}`).append('g').attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
-sizeLeg = d3.select("#legend").append("svg").attr("width", 300).attr("height", 115).attr("id", "legendid");
-colLeg = d3.select("#legend2").append("svg").attr("width", 300).attr("height", 250).attr("id", "legendid");
-tool = d3.select("#label").append("svg").attr("width", 300).attr("height", 220).attr("id", "legendid");
+sizeLeg = d3.select("#legend").append("svg").attr("width", 300).attr("height", 115);
+colLeg = d3.select("#legend2").append("svg").attr("width", 300).attr("height", 250);
+tool = d3.select("#label").append("svg").attr("width", 300).attr("height", 220);
 // ############ Begin Promise ############
 //Start of code
 //https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv
 d3.csv("https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv").then((dataraw) => {
-  var maxRadius = height*0.06;
+  var maxRadius = height*0.05;
   var padding = 1.5;
   var clusterPadding = 5;
   var today = new Date();
   var dd = String(today.getDate()).padStart(2, '0')-1;
   var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
   var yyyy = today.getFullYear();
+  console.log(mm);
   today = String(yyyy + "-" + mm +  "-" + dd);
   
  
   
   var data = dataraw.filter(function(d) 
   { 
-
+    //
+    //2021-10
+    // if(String(d["date"]) == today){
+      
+    //   console.log("yes")
+   // console.log(String(d["date"]).includes(mm));
+    // }
      if(String(d["date"]).includes(mm) && String(d["date"]).includes(dd)){
-   
-    if(d["location"] != ""|| d["location"] != d["continent"]){        
+     // console.log(d["date"])
+  //  console.log(today);
+    //   console.log(d["date"]);
+    // }
+    if(d["location"] != "Asia"||d["location"] != "European Union" || d["location"] != "North America" || d["location"] != "South America" || d["location"] != "Oceania" || d["location"] != "World"){
+        
         return d;
       }
-      if(d["continent"] != "" || d["continent"] != NULL){
+      if(d["continent"] != ""){
         
         return d;
       }
       if(d["people_fully_vaccinated"] == ""){
+      //  d["people_fully_vaccinated"] = "45";
         return d;
       }
       if(d["total_cases"] == ""){
@@ -241,7 +246,7 @@ d3.csv("https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/
   //console.log(data);
   clusters = new Array(6);
   //a radius scale to balence the sizes of the bubbles
-  let radScale = d3.scaleLinear().domain(d3.extent(data, function(d) { return +d.people_fully_vaccinated;} )).range([4, maxRadius]);
+  let radScale = d3.scaleLinear().domain(d3.extent(data, function(d) { return +d.people_fully_vaccinated;} )).range([3, maxRadius]);
   let gradientScale = d3.scaleOrdinal().range([ "#ffcb8e","#ff87a6", "#00b31b", "#cf0270", "#ff884a", "#67a2fa"])  
   //make all the nodes for this bubble chart
   let nodes = [...new Set(data.map((d) => {
@@ -277,22 +282,22 @@ d3.csv("https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/
   for(var i = 2; i >= 0; i--){
     sizeLeg.append('circle')
     .attr('cx', 55)
-    .attr('cy', 113- 1*rad[i])
-    .attr('r', Number(rad[i])*1)
+    .attr('cy', 113- 0.75*rad[i])
+    .attr('r', Number(rad[i])*0.75)
     .attr('stroke', '#828fa6')
     .style("class", "circles")
     .attr("stroke-dasharray",'1.28px')
     .attr('fill', 'none');
     sizeLeg.append('text')
     .attr('x', 100)
-    .attr('y', 118- 2.1*rad[i])
+    .attr('y', 118- 1.55*rad[i])
     .attr("fill", "rgb(66,92,140,1.0)")
     .text(d3.format(',')(Number(vacc[i])));
     sizeLeg.append('line')
     .attr('x1', 53)
     .attr('x2', 98)
-    .attr('y1', 115- 2.05*rad[i])
-    .attr('y2', 115- 2.05*rad[i])
+    .attr('y1', 115- 1.55*rad[i])
+    .attr('y2', 115- 1.55*rad[i])
     .attr('stroke', "#8997b0")
     .attr("stroke-width", "0.5px");
   }
@@ -456,7 +461,7 @@ d3.csv("https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/
     .attr('cx', 10)
     .datum(nodes)
     .attr('cy', 20*i+11)
-    .attr('r', 5.5)
+    .attr('r', 3.5)
     .attr('fill', d => 'url(' +gradients[i]+')');
     colLeg.append('text')
     .attr('x', 30)
@@ -502,7 +507,7 @@ d3.csv("https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/
         tooltip4.text("Total Cases: "+(d3.select(this).attr("cases")))
         var mouseX = event.pageX;
         //name and container
-        var width = 235;
+        var width = 208;
         var height = 150;
         var rowheight = 20;
         //metrics                  
@@ -534,7 +539,7 @@ d3.csv("https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/
        });
   // create the clustering/collision force simulation
   let simulation = d3.forceSimulation(nodes)
-      .velocityDecay(0.1)
+      .velocityDecay(0.2)
       .force("x", d3.forceX().strength(.008))
       .force("center", d3.forceCenter().x(0).y(0)) // Attraction to the center of the svg area
       .force("collide", d3.forceCollide().strength(.1).radius(function(d){ return d.r + 2.65; }).iterations(1))
