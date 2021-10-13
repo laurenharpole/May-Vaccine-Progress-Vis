@@ -225,7 +225,7 @@ d3.csv("https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/
         
         if(d["continent"] != ""){
           if(d["people_fully_vaccinated"] == "" || d["people_fully_vaccinated"] != ""){
-           // console.log(d.location);   
+            console.log(d.location);   
               return d;
           }
         } 
@@ -236,7 +236,7 @@ d3.csv("https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/
         return d["total_cases"] += "N/A";
       }
 
-    //console.log(d["total_cases"]);
+    console.log(d["total_cases"]);
      }
   });
   //console.log(data);

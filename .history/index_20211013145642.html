@@ -219,13 +219,13 @@ d3.csv("https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/
   { 
 
      if(String(d["date"]).includes(mm) && String(d["date"]).includes(dd)){
-       
+      
+      
       var dloc = String(d.location);
       if(d.location != ""|| dloc != 'World'){    
-        
+        console.log(d.location);   
         if(d["continent"] != ""){
-          if(d["people_fully_vaccinated"] == "" || d["people_fully_vaccinated"] != ""){
-           // console.log(d.location);   
+          if(d["people_fully_vaccinated"] == ""){
               return d;
           }
         } 
@@ -236,7 +236,7 @@ d3.csv("https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/
         return d["total_cases"] += "N/A";
       }
 
-    //console.log(d["total_cases"]);
+    console.log(d["total_cases"]);
      }
   });
   //console.log(data);
@@ -247,7 +247,7 @@ d3.csv("https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/
   //make all the nodes for this bubble chart
   let nodes = [...new Set(data.map((d) => {
     // scale radius to fit on the screen
-  let scaledRadius  = radScale(+d.people_fully_vaccinated),
+  let scaledRadius  = radScale(+d.people_vaccinated),
         forcedCluster = d.continent;
     // add cluster id and radius to array
     d = {
@@ -271,9 +271,9 @@ d3.csv("https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/
   rad[1] = d3.max(nodes, function(d) { return (+d.r)} )/2;
   rad[2] = d3.max(nodes, function(d) { return (+d.r)} );
   let vacc = {};
-  vacc[0] = d3.min(nodes, function(d) { return (Number(+d.full_vacc))} );
-  vacc[1] = d3.max(nodes, function(d) { return Number(+d.full_vacc)/2} );
-  vacc[2] = d3.max(nodes, function(d) { return (Number(+d.full_vacc))} );
+  vacc[0] = d3.min(nodes, function(d) { return (Number(+d.vacc))} );
+  vacc[1] = d3.max(nodes, function(d) { return Number(+d.vacc)/2} );
+  vacc[2] = d3.max(nodes, function(d) { return (Number(+d.vacc))} );
  let radScal = d3.scaleLinear().domain(rad).range([0, 10]);
   for(var i = 2; i >= 0; i--){
     sizeLeg.append('circle')
@@ -480,7 +480,7 @@ d3.csv("https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/
       .attr("r", d => d.r)
       .attr("label", d => d.cluster)
       .attr("name", d => d.name)
-      .attr("vacc", d => d.full_vacc)
+      .attr("vacc", d => d.vacc)
       .attr("cases", d => d.cases)
       .attr('fill', d => 'url(' + z(d.cluster)+')')
       .call(d3.drag()
